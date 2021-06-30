@@ -2,6 +2,7 @@
 
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/focal64"
+  config.vm.provision "shell", path: "scripts/bootstrap.sh"
   config.vm.define "docker1" do |docker1|
     docker1.vm.hostname = "docker1"
     docker1.vm.network "private_network", ip: "192.168.100.100"
