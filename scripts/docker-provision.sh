@@ -3,9 +3,6 @@
 # APT im nicht interaktiven Modus
 export DEBIAN_FRONTEND=noninteractive
 
-# System aktualisieren
-apt-get update && apt-get -y dist-upgrade && apt-get --purge -y autoremove
-
 # Docker installieren
 apt-get update
 apt-get -y install apt-transport-https ca-certificates curl software-properties-common
