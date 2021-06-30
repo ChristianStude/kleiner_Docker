@@ -7,7 +7,14 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update && apt-get -y dist-upgrade && apt-get --purge -y autoremove
 
 # Docker installieren
-apt-get -y install docker.io
+apt-get update
+apt-get -y install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+apt-get update
+apt-cache policy docker-ce
+apt-get -y install docker-ce
+
 systemctl enable --now docker
 adduser vagrant docker
 
