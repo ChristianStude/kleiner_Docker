@@ -28,6 +28,7 @@ rm /etc/resolv.conf
 echo "nameserver 192.168.100.2" > /etc/resolv.conf
 echo "search kurs.iad" >> /etc/resolv.conf
 
+# Chatbot
 # Repo klonen und Container starten
 mkdir -p /home/git && cd /home/git
 git clone https://github.com/ChristianStude/chatbot
@@ -35,3 +36,25 @@ cd chatbot && mkdir v3/model
 
 # Container starten
 docker-compose up -d
+
+# Traefik
+# traefik.yml erstellen
+mkdir -p /etc/traefik && cd /etc/traefik
+echo "# Docker configuration backend"> traefik.yml
+echo "providers:" >> traefik.yml
+echo " docker:" >> traefik.yml
+echo "  defaultRule: \"Host(\`{{ trimPrefix \`/\` .Name }}.docker.localhost\`)\"" >> traefik.yml
+echo "api:" >> traefik.yml
+echo " insecure: true" >> traefik.yml
+
+# Traefic starten
+docker run -d -p 8080:8080 -p 80:80 \
+-v $PWD/traefik.yml:/etc/traefik/traefik.yml \
+-v /var/run/docker.sock:/var/run/docker.sock \
+traefik:v2.0
+
+# Server starten
+docker run -d --name test containous/whoami
+
+# $ curl --header 'Host:test.docker.localhost' 'http://localhost:80/'
+curl test.docker.localhost
